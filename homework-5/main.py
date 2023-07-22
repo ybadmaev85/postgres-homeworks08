@@ -42,7 +42,14 @@ def main():
 
 def create_database(params, db_name) -> None:
     """Создает новую базу данных."""
-    pass
+    conn = psycopg2.connect(dbname='postgres', **params)
+    cur = conn.cursor()
+    conn.autocommit = True
+    cur.execute(f'DROP DATABASE {db_name}')
+    cur.execute(f'CREATE DATABASE {db_name}')
+    cur.fetchall()
+    cur.close()
+    conn.close()
 
 def execute_sql_script(cur, script_file) -> None:
     """Выполняет скрипт из файла для заполнения БД данными."""
